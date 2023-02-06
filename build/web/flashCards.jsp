@@ -24,9 +24,9 @@
                             <input type="checkbox" />
                             <div class="flip-card">
                                 <div class="front">
-                                    ${c.getTitle()}
+                                    ${c.getTerm()}
                                 </div>
-                                <div class="back">${c.getDescribe()}</div>
+                                <div class="back">${c.getDefinition()}</div>
                             </div>
                         </label>
                     </div>
@@ -53,8 +53,8 @@
                 <div class="number-card">Thuật ngữ trong phần này (${listC.size()})</div>
                 <c:forEach items="${listC}" var="c">
                     <div class="card-item">
-                        <div class="card-title">${c.getTitle()}</div>
-                        <div class="card-desc">${c.getDescribe()}</div>
+                        <div class="card-title">${c.getTerm()}</div>
+                        <div class="card-desc">${c.getDefinition()}</div>
                     </div>
                 </c:forEach>
             </div>
@@ -64,7 +64,7 @@
         function handleDelete(id) {
             var isConfirm = confirm("Xóa học phần này?");
             if (isConfirm) {
-                window.location.href = "http://localhost:8080/quizlet/delete?id=" + id;
+                window.location.href = "http://localhost:8080/Quizlett/delete?id=" + id;
             }
         }
 

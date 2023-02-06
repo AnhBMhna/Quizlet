@@ -35,7 +35,7 @@ body {
 
 .title-img {
     width: 70%;
-    color: #3b4c9b; 
+    color: white !important; 
     margin: 3.5%;
     font-weight: 700;
     font-size: 2.75rem;

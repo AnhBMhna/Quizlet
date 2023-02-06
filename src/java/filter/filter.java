@@ -117,22 +117,22 @@ public class filter implements Filter {
         user = (User) ses.getAttribute("user");
         String url = req.getServletPath();
         
-        if(user == null) {
-            if(!url.contains("login") && !url.contains("register")) {
-                  res.sendRedirect("login.jsp");
-            }
-        } 
-        else {
-            if(user.getStatus().equals("inactive")) {
-                if(!url.endsWith("verify.jsp") && !url.contains("login")) {
-                    res.sendRedirect("verify.jsp");
-                }
-            } else {
-                if(url.endsWith("login.jsp") || url.endsWith("register.jsp") || url.endsWith("verify.jsp")) {
-                    res.sendRedirect("home");
-                }
-            }
-        }
+//        if(user == null) {
+//            if(!url.contains("login") && !url.contains("register")) {
+//                  res.sendRedirect("login.jsp");
+//            }
+//        } 
+//        else {
+//            if(user.getStatus().equals("inactive")) {
+//                if(!url.endsWith("verify.jsp") && !url.contains("login")) {
+//                    res.sendRedirect("verify.jsp");
+//                }
+//            } else {
+//                if(url.endsWith("login.jsp") || url.endsWith("register.jsp") || url.endsWith("verify.jsp")) {
+//                    res.sendRedirect("home");
+//                }
+//            }
+//        }
         
         Throwable problem = null;
         try {

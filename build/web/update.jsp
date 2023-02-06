@@ -38,11 +38,11 @@
                         </div>
                         <div class="card-body">
                             <div class="card-title">
-                                <input type="text" name="card-title" class="input-card" value="${listC.get(i-1).getTitle()}"/><br/>
+                                <input type="text" name="card-title" class="input-card" value="${listC.get(i-1).getTerm()}"/><br/>
                                 <div class="title-input">THUẬT NGỮ</div>
                             </div>
                             <div class="card-desc">
-                                <input type="text" name="card-desc" class="input-card" value="${listC.get(i-1).getDescribe()}"/><br/>
+                                <input type="text" name="card-desc" class="input-card" value="${listC.get(i-1).getDefinition()}"/><br/>
                                 <div class="title-input">ĐỊNH NGHĨA</div>
                             </div>
                         </div>

@@ -10,17 +10,17 @@ package model;
  */
 public class Card {
     private int id;
-    private String title;
-    private String describe;
+    private String term;
+    private String definition;
     private int studySetId;
 
     public Card() {
     }
 
-    public Card(int id, String title, String describe, int studySetId) {
+    public Card(int id, String term, String definition, int studySetId) {
         this.id = id;
-        this.title = title;
-        this.describe = describe;
+        this.term = term;
+        this.definition = definition;
         this.studySetId = studySetId;
     }
 
@@ -32,20 +32,20 @@ public class Card {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTerm() {
+        return term;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTerm(String term) {
+        this.term = term;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDefinition() {
+        return definition;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDefinition(String definition) {
+        this.definition = definition;
     }
 
     public int getStudySetId() {
@@ -55,6 +55,4 @@ public class Card {
     public void setStudySetId(int studySetId) {
         this.studySetId = studySetId;
     }
-    
-    
 }

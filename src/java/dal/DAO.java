@@ -18,15 +18,21 @@ import model.User;
  * @author LENOVO
  */
 public class DAO extends DBContext {
-
+    public static void main(String[] args) {
+        DAO dao = new DAO();
+        List<User> list = dao.getAllUser();
+        System.out.println(list.get(0).getName());
+    }
+    
     public ArrayList<User> getAllUser() {
         ArrayList<User> listU = new ArrayList<>();
-        String sql = "select * from User_HE161521";
+        String sql = "select * from [User]";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                User u = new User(rs.getString("name"), rs.getString("password"), rs.getString("email"), rs.getString("status"), rs.getInt("userID"));
+                User u = new User(rs.getString("name"), rs.getString("password"), rs.getString("gmail"),
+                        rs.getBoolean("isActive"), rs.getString("avatar"), rs.getInt("userId"), rs.getString("language"));
                 listU.add(u);
             }
         } catch (Exception e) {
@@ -47,18 +53,22 @@ public class DAO extends DBContext {
     }
 
     public void register(User user) {
-        String sql = "INSERT INTO [dbo].[User_HE161521]\n"
+        String sql = "INSERT INTO [dbo].[User]\n"
                 + "           ([name]\n"
                 + "           ,[password]\n"
-                + "           ,[status]\n"
-                + "           ,[email])\n"
-                + "     VALUES (?, ?, ?, ?)";
+                + "           ,[gmail]\n"
+                + "           ,[isActive]\n"
+                + "           ,[avatar]\n"
+                + "           ,[language])\n"
+                + "     VALUES (?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, user.getName());
             st.setString(2, user.getPass());
-            st.setString(3, user.getStatus());
-            st.setString(4, user.getEmail());
+            st.setString(3, user.getEmail());
+            st.setBoolean(4, user.isIsActive());
+            st.setString(5, user.getAvatar());
+            st.setString(6, user.getLanguage());
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -68,12 +78,12 @@ public class DAO extends DBContext {
 
     public int getIdStudySet() {
         int idx = 0;
-        String sql = "SELECT TOP 1 * FROM StudySet_HE161521 ORDER BY studysetID DESC";
+        String sql = "SELECT TOP 1 * FROM StudySet ORDER BY studySetId DESC";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return rs.getInt("studySetID");
+                return rs.getInt("studySetId");
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -83,7 +93,7 @@ public class DAO extends DBContext {
 
     public boolean activeAccount(String email) {
         boolean check = false;
-        String sql = "update user_he161521 set status='active' where email like ?";
+        String sql = "update User set isActive = 1 where gmail like ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, email);
@@ -96,20 +106,23 @@ public class DAO extends DBContext {
     }
 
     public void addStudySet(StudySet set) {
-        String sql = "INSERT INTO [dbo].[StudySet_HE161521]\n"
+        String sql = "INSERT INTO [dbo].[StudySet]\n"
                 + "           ([title]\n"
-                + "           ,[describe]\n"
+                + "           ,[description]\n"
                 + "           ,[isShare]\n"
-                + "           ,[folderID]\n"
-                + "           ,[userID])\n"
-                + "     VALUES(?, ?, ?, ?, ?)";
+                + "           ,[folderId]\n"
+                + "           ,[userId]\n"
+                + "           ,[classId])\n"
+                + "     VALUES\n"
+                + "           (?,?,?,?,?,?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, set.getTitle());
-            st.setString(2, set.getDescribe());
+            st.setString(2, set.getDescription());
             st.setBoolean(3, true);
             st.setInt(4, set.getFolderId());
             st.setInt(5, set.getUserId());
+            st.setInt(6, set.getClassId());
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -118,15 +131,16 @@ public class DAO extends DBContext {
     }
 
     public void addCard(Card c) {
-        String sql = "INSERT INTO [dbo].[Card_HE161521]\n"
-                + "           ([title]\n"
-                + "           ,[describe]\n"
-                + "           ,[studySetID])\n"
-                + "     VALUES(?, ?, ?)";
+        String sql = "INSERT INTO [dbo].[Card]\n"
+                + "           ([term]\n"
+                + "           ,[definition]\n"
+                + "           ,[studySetId])\n"
+                + "     VALUES\n"
+                + "           (?,?,?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, c.getTitle());
-            st.setString(2, c.getDescribe());
+            st.setString(1, c.getTerm());
+            st.setString(2, c.getDefinition());
             st.setInt(3, c.getStudySetId());
             st.executeUpdate();
         } catch (Exception e) {
@@ -136,26 +150,28 @@ public class DAO extends DBContext {
 
     public ArrayList<StudySet> getAllStudySet(User user) {
         ArrayList<StudySet> listS = new ArrayList<>();
-        String sql = "SELECT [studySetID]\n"
+        String sql = "SELECT [studySetId]\n"
                 + "      ,[title]\n"
-                + "      ,[describe]\n"
+                + "      ,[description]\n"
                 + "      ,[isShare]\n"
-                + "      ,[folderID]\n"
-                + "      ,[userID]\n"
-                + "  FROM [dbo].[StudySet_HE161521]\n"
-                + "  WHERE userID=?";
+                + "      ,[folderId]\n"
+                + "      ,[userId]\n"
+                + "      ,[classId]\n"
+                + "  FROM [dbo].[StudySet]\n"
+                + "  WHERE userId=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, user.getId());
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 StudySet set = new StudySet();
-                set.setId(rs.getInt("studySetID"));
+                set.setId(rs.getInt("studySetId"));
                 set.setTitle(rs.getString("title"));
-                set.setDescribe(rs.getString("describe"));
+                set.setDescription(rs.getString("description"));
                 set.setIsShare(rs.getBoolean("isShare"));
-                set.setFolderId(rs.getInt("folderID"));
-                set.setUserId(rs.getInt("userID"));
+                set.setFolderId(rs.getInt("folderId"));
+                set.setUserId(rs.getInt("userId"));
+                set.setUserId(rs.getInt("classId"));
                 listS.add(set);
             }
         } catch (Exception e) {
@@ -166,23 +182,24 @@ public class DAO extends DBContext {
 
     public StudySet getStudySetById(int id) {
         ArrayList<StudySet> listS = new ArrayList<>();
-        String sql = "SELECT [studySetID]\n"
+        String sql = "SELECT [studySetId]\n"
                 + "      ,[title]\n"
-                + "      ,[describe]\n"
+                + "      ,[description]\n"
                 + "      ,[isShare]\n"
-                + "      ,[folderID]\n"
-                + "      ,[userID]\n"
-                + "  FROM [dbo].[StudySet_HE161521]\n"
-                + "  WHERE studySetID=?";
+                + "      ,[folderId]\n"
+                + "      ,[userId]\n"
+                + "      ,[classId]\n"
+                + "  FROM [dbo].[StudySet]\n"
+                + "  WHERE studySetId=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 StudySet set = new StudySet();
-                set.setId(rs.getInt("studySetID"));
+                set.setId(rs.getInt("studySetId"));
                 set.setTitle(rs.getString("title"));
-                set.setDescribe(rs.getString("describe"));
+                set.setDescription(rs.getString("description"));
                 set.setIsShare(rs.getBoolean("isShare"));
                 set.setFolderId(rs.getInt("folderID"));
                 set.setUserId(rs.getInt("userID"));
@@ -196,11 +213,11 @@ public class DAO extends DBContext {
 
     public ArrayList<Card> getAllCardInSet(int id) {
         ArrayList<Card> listC = new ArrayList<>();
-        String sql = "SELECT [cardID]\n"
-                + "      ,[title]\n"
-                + "      ,[describe]\n"
-                + "      ,[studySetID]\n"
-                + "  FROM [dbo].[Card_HE161521]\n"
+        String sql = "SELECT [cardId]\n"
+                + "      ,[term]\n"
+                + "      ,[definition]\n"
+                + "      ,[studySetId]\n"
+                + "  FROM [dbo].[Card]\n"
                 + "  WHERE studySetID=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -209,9 +226,9 @@ public class DAO extends DBContext {
             while (rs.next()) {
                 Card c = new Card();
                 c.setId(rs.getInt("cardID"));
-                c.setTitle(rs.getString("title"));
-                c.setDescribe(rs.getString("describe"));
-                c.setStudySetId(rs.getInt("studySetID"));
+                c.setTerm(rs.getString("term"));
+                c.setDefinition(rs.getString("definition"));
+                c.setStudySetId(rs.getInt("studySetId"));
                 listC.add(c);
             }
         } catch (Exception e) {
@@ -232,8 +249,8 @@ public class DAO extends DBContext {
     }
 
     public void deleteStudySet(int id) {
-        String sql = "DELETE FROM [dbo].[StudySet_HE161521]\n"
-                + "      WHERE studySetID=?";
+        String sql = "DELETE FROM [dbo].[StudySet]\n"
+                + "      WHERE studySetId=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
@@ -244,30 +261,34 @@ public class DAO extends DBContext {
     }
 
     public void deleteAllCard(int studySetId) {
-        String sql = "DELETE FROM [dbo].[Card_HE161521]\n"
-                + "      WHERE studySetID=?";
+        String sql = "DELETE FROM [dbo].[Card]\n"
+                + "      WHERE studySetId=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, studySetId);
             st.executeUpdate();
-            deleteStudySet(studySetId);
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     public void updateStudySet(StudySet set) {
-        String sql = "UPDATE [dbo].[StudySet_HE161521]\n"
+        String sql = "UPDATE [dbo].[StudySet]\n"
                 + "   SET [title] = ?\n"
-                + "      ,[describe] = ?\n"
+                + "      ,[description] = ?\n"
                 + "      ,[isShare] = ?\n"
-                + " WHERE studySetID=?";
+                + "      ,[folderId] = ?\n"
+                + "      ,[userId] = ?\n"
+                + "      ,[classId] = ?\n"
+                + " WHERE studySetId=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, set.getTitle());
-            st.setString(2, set.getDescribe());
+            st.setString(2, set.getDescription());
             st.setBoolean(3, set.isIsShare());
-            st.setInt(4, set.getId());
+            st.setInt(4, set.getFolderId());
+            st.setInt(5, set.getUserId());
+            st.setInt(6, set.getClassId());
             st.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -275,29 +296,37 @@ public class DAO extends DBContext {
     }
 
     public void updateCard(Card c) {
-        String sql = "UPDATE [dbo].[Card_HE161521]\n"
-                + "   SET [title] = ?\n"
-                + "      ,[describe] = ?\n"
-                + " WHERE cardID=?";
+        String sql = "UPDATE [dbo].[Card]\n"
+                + "   SET [term] = ?\n"
+                + "      ,[definition] = ?\n"
+                + "      ,[studySetId] = ?\n"
+                + " WHERE cardId=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, c.getTitle());
-            st.setString(2, c.getDescribe());
+            st.setString(1, c.getTerm());
+            st.setString(2, c.getDefinition());
             st.setInt(3, c.getId());
             st.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
-    
+
     public ArrayList<StudySet> getAllStudySet() {
         ArrayList<StudySet> listS = new ArrayList<>();
-        String sql = "Select * from StudySet_HE161521";
+        String sql = "Select * from StudySet";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                StudySet set = new StudySet(rs.getInt("studySetID"), rs.getString("title"), rs.getString("describe"), rs.getBoolean("isShare"), rs.getInt("folderID"), rs.getInt("userID") );
+                StudySet set = new StudySet(
+                        rs.getInt("studySetId"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getBoolean("isShare"),
+                        rs.getInt("folderId"),
+                        rs.getInt("userId"),
+                        rs.getInt("classId"));
                 listS.add(set);
             }
         } catch (Exception e) {

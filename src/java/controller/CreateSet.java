@@ -112,7 +112,7 @@ public class CreateSet extends HttpServlet {
         } else {
             int countCard = 0;
             for (Card c : listC) {
-                if (!c.getTitle().equals("") || !c.getDescribe().equals("")) {
+                if (!c.getTerm().equals("") || !c.getDefinition().equals("")) {
                     countCard++;
                 }
             }
@@ -125,11 +125,11 @@ public class CreateSet extends HttpServlet {
                 request.getRequestDispatcher("createSet.jsp").forward(request, response);
             } else {
                 User user = (User) ses.getAttribute("user");
-                StudySet set = new StudySet(0, titleSet, descSet, true, 2, user.getId());
+                StudySet set = new StudySet(0, titleSet, descSet, true, 1, user.getId(), 1);
                 d.addStudySet(set);
                 for (Card c : listC) {
-                    if (!c.getTitle().equals("") || !c.getDescribe().equals("")) {
-                        Card c_new = new Card(0, c.getTitle(), c.getDescribe(), d.getIdStudySet());
+                    if (!c.getTerm().equals("") || !c.getDefinition().equals("")) {
+                        Card c_new = new Card(0, c.getTerm(), c.getDefinition(), d.getIdStudySet());
                         d.addCard(c_new);
                     }
                 }

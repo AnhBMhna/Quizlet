@@ -31,6 +31,11 @@
                         <input type="text" name="user" placeholder="andrew123" class="input-form"/>
                         <div class="text-form">MẬT KHẨU</div> 
                         <input type="password" name="pass" placeholder="********" class="input-form"/>
+                        <div class="text-form">AVATAR</div> 
+                        <input type="text" name="avatar" placeholder="image" class="input-form"/>
+                        <div class="text-form">LANGUAGE</div> 
+                        <input type="text" name="lang" placeholder="Choose language" class="input-form"/>
+                        
                         <input type="submit" value="Đăng ký" class="register-button"/>
                         <p class="errInput" style="color: red;">${requestScope.errInvalidInput}</p>
                         <p class="errInput" style="color: red;">${requestScope.errEmpty}</p>

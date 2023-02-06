@@ -68,7 +68,8 @@ public class Register extends HttpServlet {
         String name = request.getParameter("user");
         String pass = request.getParameter("pass");
         String email = request.getParameter("email");
-
+        String avatar = request.getParameter("avatar");
+        String language = request.getParameter("lang");
         Utilities val = new Utilities();
 
         if (val.isBlank(email) || val.isBlank(name) || val.isBlank(email)) {
@@ -85,7 +86,7 @@ public class Register extends HttpServlet {
         } else {
             try {
                 DAO d = new DAO();
-                User user = new User(name, pass, email, "inactive", 0);
+                User user = new User(name, pass, email, false, avatar, 0, language);
                 d.register(user);
                 response.sendRedirect("login.jsp");
             } catch(Exception e) {

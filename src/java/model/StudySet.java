@@ -14,22 +14,34 @@ import java.util.ArrayList;
 public class StudySet {
     private int id;
     private String title;
-    private String describe;
+    private String description;
     private boolean isShare;
     private int folderId;
     private int userId;
+    private int classId;
 
     public StudySet() {
     }
 
-    public StudySet(int id, String title, String describe, boolean isShare, int folderId, int userId) {
+    public StudySet(int id, String title, String description, boolean isShare, int folderId, int userId, int classId) {
         this.id = id;
         this.title = title;
-        this.describe = describe;
+        this.description = description;
         this.isShare = isShare;
         this.folderId = folderId;
         this.userId = userId;
+        this.classId = classId;
     }
+
+    public int getClassId() {
+        return classId;
+    }
+
+    public void setClassId(int classId) {
+        this.classId = classId;
+    }
+
+    
 
     public int getId() {
         return id;
@@ -47,12 +59,12 @@ public class StudySet {
         this.title = title;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean isIsShare() {

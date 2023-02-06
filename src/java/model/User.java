@@ -12,19 +12,25 @@ public class User {
     private String name;
     private String pass;
     private String email;
-    private String status;
+    private boolean isActive;
+    private String avatar;
     private int id;
+    private String language;
 
     public User() {
     }
 
-    public User(String name, String pass, String email, String status, int id) {
+    public User(String name, String pass, String email, boolean isActive, String avatar, int id, String language) {
         this.name = name;
         this.pass = pass;
         this.email = email;
-        this.status = status;
+        this.isActive = isActive;
+        this.avatar = avatar;
         this.id = id;
+        this.language = language;
     }
+
+    
 
     public String getName() {
         return name;
@@ -58,12 +64,28 @@ public class User {
         this.email = email;
     }
 
-    public String getStatus() {
-        return status;
+    public boolean isIsActive() {
+        return isActive;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     

@@ -15,7 +15,7 @@
     <body>
         <div class="wrapper-sign">
             <div class="container-img">
-                <h1 class="title-img">Học hiệu quả mà thật thoải mái.</h1>
+                <h1 class="title-img" style="color: white">Học hiệu quả mà thật thoải mái.</h1>
                 <div class="logo">Quizlet</div>
             </div>
             <div class="container-form">

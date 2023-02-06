@@ -12,14 +12,34 @@ public class Folder {
     private String id;
     private String title;
     private String desc;
+    private int userId;
+    private boolean isShare;
 
     public Folder() {
     }
 
-    public Folder(String id, String title, String desc) {
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public boolean isIsShare() {
+        return isShare;
+    }
+
+    public void setIsShare(boolean isShare) {
+        this.isShare = isShare;
+    }
+    
+    public Folder(String id, String title, String desc, int userId, boolean isShare) {
         this.id = id;
         this.title = title;
         this.desc = desc;
+        this.userId = userId;
+        this.isShare = isShare;
     }
 
     public String getId() {

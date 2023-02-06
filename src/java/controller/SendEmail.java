@@ -29,8 +29,8 @@ public class SendEmail {
         DAO d = new DAO();
 
         String toEmail = user.getEmail();
-        String fromEmail = "vublhe161521@fpt.edu.vn";
-        String password = "vubui@@2509";
+        String fromEmail = "hungbmhe161538@fpt.edu.vn";
+        String password = "anhbm1311hung";
 
         Properties pr = new Properties();
         pr.setProperty("mail.smtp.host", "smtp.gmail.com");

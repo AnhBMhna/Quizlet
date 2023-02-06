@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.DAO;
@@ -22,36 +21,39 @@ import model.StudySet;
  *
  * @author LENOVO
  */
-@WebServlet(name="Update", urlPatterns={"/update"})
+@WebServlet(name = "Update", urlPatterns = {"/update"})
 public class Update extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Update</title>");  
+            out.println("<title>Servlet Update</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Update at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet Update at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -60,15 +62,16 @@ public class Update extends HttpServlet {
     int num;
     int id;
     int num_root;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         String id_raw = request.getParameter("id");
         id = Integer.parseInt(id_raw);
         DAO d = new DAO();
         StudySet set = d.getStudySetById(id);
         request.setAttribute("titleSet", set.getTitle());
-        request.setAttribute("descSet", set.getDescribe());
+        request.setAttribute("descSet", set.getDescription());
         request.setAttribute("isShare", set.isIsShare());
         request.setAttribute("id", id);
         ArrayList<Card> listC = d.getAllCardInSet(id);
@@ -78,10 +81,11 @@ public class Update extends HttpServlet {
         num_root = num;
         request.setAttribute("numCard", num);
         request.getRequestDispatcher("update.jsp").forward(request, response);
-    } 
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -89,7 +93,7 @@ public class Update extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         HttpSession ses = request.getSession();
         String btnIncrease = request.getParameter("btn-increase");
         DAO d = new DAO();
@@ -103,24 +107,22 @@ public class Update extends HttpServlet {
         String[] listId = request.getParameterValues("id-card");
         for (int i = 0; i < listTitleCard.length; i++) {
             listC.add(new Card(Integer.parseInt(listId[i]), listTitleCard[i], listDescCard[i], id));
-            if(i<num_root) {
-                listCUpdate.add(new Card(Integer.parseInt(listId[i]), listTitleCard[i], listDescCard[i], id));  
+            if (i < num_root) {
+                listCUpdate.add(new Card(Integer.parseInt(listId[i]), listTitleCard[i], listDescCard[i], id));
             } else {
-                listCAdd.add(new Card(Integer.parseInt(listId[i]), listTitleCard[i], listDescCard[i], id));  
+                listCAdd.add(new Card(Integer.parseInt(listId[i]), listTitleCard[i], listDescCard[i], id));
             }
         }
         String titleSet = request.getParameter("titleSet");
         String descSet = request.getParameter("descSet");
         String isShare_raw = request.getParameter("isShare");
-        if(isShare_raw != null) {
-            if(isShare_raw.equals("on")) {
+        if (isShare_raw != null) {
+            if (isShare_raw.equals("on")) {
                 isShare_raw = "true";
             }
         } else {
             isShare_raw = "false";
         }
-        
-        
 
         if (btnIncrease != null) {
             num = num + 1;
@@ -133,23 +135,23 @@ public class Update extends HttpServlet {
             request.getRequestDispatcher("update.jsp").forward(request, response);
         } else {
             Boolean isShare;
-            if(isShare_raw.equals("true")) {
+            if (isShare_raw.equals("true")) {
                 isShare = true;
             } else {
                 isShare = false;
             }
-            StudySet set = new StudySet(id, titleSet, descSet, isShare, 2, 0);
+            StudySet set = new StudySet(id, titleSet, descSet, isShare, 2, 1, 1);
 
             d.updateStudySet(set);
             for (Card c : listCUpdate) {
-                if (!c.getTitle().equals("") || !c.getDescribe().equals("")) {
-                    Card c_new = new Card(c.getId(), c.getTitle(), c.getDescribe(), d.getIdStudySet());
+                if (!c.getTerm().equals("") || !c.getDefinition().equals("")) {
+                    Card c_new = new Card(c.getId(), c.getTerm(), c.getDefinition(), d.getIdStudySet());
                     d.updateCard(c_new);
                 }
             }
-            for(Card c: listCAdd) {
-                if(!c.getTitle().equals("") || !c.getDescribe().equals("")) {
-                    Card c_new = new Card(c.getId(), c.getTitle(), c.getDescribe(), d.getIdStudySet());
+            for (Card c : listCAdd) {
+                if (!c.getTerm().equals("") || !c.getDefinition().equals("")) {
+                    Card c_new = new Card(c.getId(), c.getTerm(), c.getDefinition(), d.getIdStudySet());
                     d.addCard(c_new);
                 }
             }
@@ -157,8 +159,9 @@ public class Update extends HttpServlet {
         }
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

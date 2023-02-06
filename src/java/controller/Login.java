@@ -84,7 +84,7 @@ public class Login extends HttpServlet {
         HttpSession ses = request.getSession();
         ses.setAttribute("user", user);
         if (user != null) {
-            if (user.getStatus().equals("inactive")) {
+            if (user.isIsActive() == false) {
                 SendEmail sm = new SendEmail();
                 String code = sm.getRandom();
                 ses.setAttribute("code", code);
